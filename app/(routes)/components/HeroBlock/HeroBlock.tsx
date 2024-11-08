@@ -1,18 +1,23 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function HeroBlock() {
   return (
     <div className="p-6 md:py-32">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="text-center">
-          <h2 className="text-4xl font-semibold mb-4">QUE HACEMOS</h2>
-          <p className="mb-8">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non
-            risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing
-            nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas
-            ligula massa, varius a, semper congue, euismod non, mi. Proin
+          <h2 className="text-xl md:text-5xl font-bold mb-4">
+            Unidos para Reconstruir
+          </h2>
+          <p className="mb-4">
+            Apoya a los afectados por la Dana proveyendo las necesidades
+            esenciales para reconstruir sus hogares y vidas. Cada aporte cuenta.
           </p>
-          <Button>Solicitar ayuda</Button>
+          <div className="flex flex-col md:flex-row  gap-4 justify-center">
+            <Button size="lg" asChild>
+              <Link href="/solicitar-ayuda">SOLICITAR AYUDA</Link>
+            </Button>
+          </div>
         </div>
       </div>
       ;

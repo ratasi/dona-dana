@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 const dataNavbar = [
@@ -19,13 +20,18 @@ export function Navbar() {
     <nav className="p-4 border-b">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-semibold">Dana Solidaria</h1>
-          <div className="flex gap-8">
+          <Link href="/">
+            <h1 className="text-lg font-semibold">Tornem a casa</h1>
+          </Link>
+          <div className="flex gap-8 items-center">
             {dataNavbar.map(({ name, href }) => (
               <Link key={name} href={href}>
                 {name}
               </Link>
             ))}
+            <Button asChild>
+              <Link href="/solicitar-ayuda">Solicitar ayuda</Link>
+            </Button>
           </div>
         </div>
       </div>
