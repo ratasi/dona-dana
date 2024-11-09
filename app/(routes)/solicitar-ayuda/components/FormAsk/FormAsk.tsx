@@ -183,7 +183,7 @@ export function FormAsk(props: FormAskProps) {
                 render={({ field }) => (
                   <FormItem>
                     <div className="mb-4">
-                      <FormLabel>Documento de Identificación new</FormLabel>
+                      <FormLabel>Documento de Identificación</FormLabel>
                       <FormDescription>
                         Adjunta un documento que identifique tu vivienda (ej.
                         factura de luz, agua, internet).
