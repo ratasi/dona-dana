@@ -13,7 +13,7 @@ export default function HeroBlock() {
             Apoya a los afectados por la Dana proveyendo las necesidades
             esenciales para reconstruir sus hogares y vidas.
           </p>
-          <p className="text-primary mb-4 font-semibold">Cada aporte cuenta.</p>
+          <p className="mb-4 font-semibold">Cada aporte cuenta.</p>
           <div className="flex flex-col md:flex-row  gap-4 justify-center">
             <Button size="lg" asChild>
               <Link href="/solicitar-ayuda">SOLICITAR AYUDA</Link>

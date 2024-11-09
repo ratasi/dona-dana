@@ -1,5 +1,6 @@
+import { Navbar } from "@/components/Shared/Navbar";
+
 import HeroBlock from "./(routes)/components/HeroBlock/HeroBlock";
-import { Navbar } from "./(routes)/components/Navbar";
 import { NeedHelp } from "./(routes)/components/NeedHelp";
 import { WhyWeDoThat } from "./(routes)/components/WhyWeDoThat";
 
