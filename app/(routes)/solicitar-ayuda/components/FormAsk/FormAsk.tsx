@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,28 +24,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { items } from "./FormAsk.data";
-import { useEffect, useState } from "react";
-import { AddressSearchResult } from "./FormAsk.types";
-
-const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  address: z.string().min(2).max(50, { message: "Dirección inválida" }),
-  phone: z.string().min(2).max(50, { message: "Número de teléfono inválido" }),
-  items: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: "Tienes que seleccionar al menos un artículo.",
-  }),
-  portal: z.number().optional(),
-  lat: z.string(),
-  lon: z.string(),
-});
+import { items, provincesData } from "./FormAsk.data";
+import { formSchema } from "./FormAsk.form";
 
 export function FormAsk() {
-  const [addressError, setAddressError] = useState("");
-  const [addressSearched, setAddressSearched] = useState<
-    AddressSearchResult | []
-  >([]);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -49,48 +39,6 @@ export function FormAsk() {
       items: [""],
     },
   });
-
-  const verifyAddress = async (address: string) => {
-    if (address.length < 3) return;
-
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-          address
-        )}&format=json`
-      );
-      const data = await response.json();
-      console.log(data);
-
-      if (data.length === 0) {
-        setAddressError("Dirección no encontrada. Intenta ser más específico.");
-      } else {
-        setAddressSearched(data);
-        setAddressError("");
-      }
-    } catch (error) {
-      console.error("Error al verificar la dirección:", error);
-      setAddressError("Error al verificar la dirección.");
-    }
-  };
-
-  useEffect(() => {
-    const subscription = form.watch((value, { name }) => {
-      if (name === "address" && value.address) {
-        verifyAddress(value.address);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.watch]);
-
-  const handleSelectAddress = (selectedAddress: AddressSearchResult) => {
-    // Establece la dirección seleccionada en el campo address
-    form.setValue("address", selectedAddress.name);
-    // Limpia el listado de direcciones para evitar más búsquedas
-    setAddressSearched([]);
-  };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.log(values);
@@ -127,42 +75,50 @@ export function FormAsk() {
                 </FormItem>
               )}
             />
-          </div>
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Dirección de tu domicilio afectado</FormLabel>
-                <FormControl>
-                  <Input placeholder="Introduce tu dirección" {...field} />
-                </FormControl>
-                <div>
-                  {addressError && !addressSearched && (
-                    <div>
-                      <p>
-                        No se han encontrador resultados para esa dirección.
-                      </p>
-                    </div>
-                  )}
-                  {addressSearched.length > 0 && (
-                    <div>
-                      {addressSearched.map((result, index) => (
-                        <div
-                          key={index}
-                          className="cursor-pointer"
-                          onClick={() => handleSelectAddress(result)}
-                        >
-                          {result?.name}
-                        </div>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder="Introduce tu correo electrónico"
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona tu localidad afectada" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {provincesData.map((province) => (
+                        <SelectItem value={province.value} key={province.value}>
+                          {province.value}
+                        </SelectItem>
                       ))}
-                    </div>
-                  )}
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="items"
@@ -174,7 +130,7 @@ export function FormAsk() {
                     Selecciona al menos un artículo que necesites.
                   </FormDescription>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {items.map((item) => (
                     <FormField
                       key={item.id}
@@ -213,7 +169,11 @@ export function FormAsk() {
               </FormItem>
             )}
           />
-          <Button type="submit">Solicitar ayuda</Button>
+          <div className="flex justify-center">
+            <Button type="submit" className="w-52">
+              Solicitar ayuda
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
